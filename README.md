@@ -1,6 +1,6 @@
 # HTML Template Repository with HTML Proofer
 
-This template repository includes preconfigured GitHub Action that will validate html files in a project with (HTMLProofer)[https://github.com/gjtorikian/html-proofer/].
+This template repository includes preconfigured GitHub Action that will validate html files in a project with [HTMLProofer](https://github.com/gjtorikian/html-proofer/).
 And htmx to load partials
 
 ```html
