@@ -4,7 +4,6 @@
   color: #fff;
 
   background:
-    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
     url("../img/home-cover.png") center / cover no-repeat;
 }
 
