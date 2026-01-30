@@ -1,0 +1,80 @@
+<section class="catalog">
+<span class="catalog__label">// CATALOG</span>
+<h2 class="catalog__title">OUR PRODUCTS</h2>
+<p class="catalog__subtitle">
+Explore our curated timepieces, from classic essentials to bold statement pieces.
+</p>
+
+
+<div class="catalog__tabs">
+<div class="catalog__tab catalog__tab--active">Mechanical</div>
+<div class="catalog__tab">Quartz</div>
+<div class="catalog__tab">Automatic</div>
+</div>
+
+
+<div class="catalog__grid">
+<article class="product">
+<div class="product__image-wrapper">
+<img src="img/watch-1.png" alt="Aureus Chronograph" />
+</div>
+<h3 class="product__name">Aureus Chronograph</h3>
+<div class="product__price">$185,500USD</div>
+<button class="product__buy" data-product="Aureus Chronograph" data-price="185500">Buy Now</button>
+</article>
+
+
+<article class="product">
+<div class="product__image-wrapper">
+<img src="img/watch-2.png" alt="Lunar Horizon" />
+</div>
+<h3 class="product__name">Lunar Horizon</h3>
+<div class="product__price">$190,000USD</div>
+<button class="product__buy" data-product="Lunar Horizon" data-price="190000">Buy Now</button>
+</article>
+
+
+<article class="product">
+<div class="product__image-wrapper">
+<span class="product__badge">Sale</span>
+<img src="img/watch-3.png" alt="Midnight Meridian" />
+</div>
+<h3 class="product__name">Midnight Meridian</h3>
+<div class="product__price">
+<span class="product__price--old">$250,000USD</span>
+$200,000USD
+</div>
+<button class="product__buy" data-product="Midnight Meridian" data-price="200000">Buy Now</button>
+</article>
+
+
+<article class="product">
+<div class="product__image-wrapper">
+<img src="img/watch-4.png" alt="Veyra Atlas" />
+</div>
+<h3 class="product__name">Veyra Atlas</h3>
+<div class="product__price">$145,500USD</div>
+<button class="product__buy" data-product="Veyra Atlas" data-price="145500">Buy Now</button>
+</article>
+</div>
+</section>
+
+
+<script>
+const cart = [];
+
+
+document.querySelectorAll('.product__buy').forEach(button => {
+button.addEventListener('click', () => {
+const productName = button.dataset.product;
+const price = Number(button.dataset.price);
+cart.push({ name: productName, price });
+alert(`${productName} added to cart`);
+console.log(cart);
+});
+});
+</script>
+
+
+</body>
+</html>
