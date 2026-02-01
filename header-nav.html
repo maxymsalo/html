@@ -3,9 +3,7 @@
     <img class="header__cover" src="img/home-cover.png" alt="">
 
     <!-- Logo -->
-    <div class="header__logo">
-      CHRONOVIA
-    </div>
+    <div class="header__logo">CHRONOVIA</div>
 
     <!-- Navigation -->
     <nav class="header__nav">
@@ -25,19 +23,23 @@
       <a href="#" class="action__icon">YT</a>
       <a href="#" class="action__icon">TW</a>
 
-      <button class="cart">
-        👜
-        <span class="cart__count">1</span>
-      </button>
-    </div>
-    
-    <div class="header__cart">
+      <!-- CART -->
+      <div class="header__cart">
         <button class="header__cart-btn" aria-label="Cart">
-        👜
-        <span class="header__cart-count">0</span>
+          👜
+          <span class="header__cart-count">0</span>
         </button>
+
+        <!-- CART POPUP -->
+        <div class="cart-popup" hidden>
+          <div class="cart-popup__list"></div>
+
+          <div class="cart-popup__footer">
+            <span class="cart-popup__total">Total: $0 USD</span>
+            <a href="cart.html" class="cart-popup__link">View cart</a>
+          </div>
+        </div>
+      </div>
     </div>
-
-
   </div>
 </header>

@@ -1,3 +1,6 @@
+/* ================================
+   Reset & Base
+================================ */
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +11,9 @@ body {
   font-family: "Arial", sans-serif;
 }
 
-/* Header */
+/* ================================
+   Header
+================================ */
 .header {
   position: absolute;
   top: 0;
@@ -36,7 +41,9 @@ body {
   justify-content: space-between;
 }
 
-/* Logo */
+/* ================================
+   Logo
+================================ */
 .header__logo {
   font-size: 20px;
   font-weight: 700;
@@ -44,7 +51,9 @@ body {
   color: #ffffff;
 }
 
-/* Navigation */
+/* ================================
+   Navigation
+================================ */
 .header__nav {
   flex: 1;
   display: flex;
@@ -70,7 +79,9 @@ body {
   opacity: 0.7;
 }
 
-/* Actions */
+/* ================================
+   Actions
+================================ */
 .header__actions {
   display: flex;
   align-items: center;
@@ -89,9 +100,15 @@ body {
   opacity: 1;
 }
 
-/* Cart */
-.cart {
+/* ================================
+   Cart
+================================ */
+.header__cart {
   position: relative;
+}
+
+/* Cart button */
+.header__cart-btn {
   background: #ffffff;
   border: none;
   width: 44px;
@@ -99,9 +116,14 @@ body {
   border-radius: 50%;
   cursor: pointer;
   font-size: 18px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.cart__count {
+/* Cart counter */
+.header__cart-count {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -114,4 +136,78 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ================================
+   Cart Popup (Mini Cart)
+================================ */
+.cart-popup {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 100;
+}
+
+.cart-popup__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cart-popup__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.cart-popup__remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999999;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.cart-popup__remove:hover {
+  color: #111111;
+}
+
+.cart-popup__footer {
+  border-top: 1px solid #eeeeee;
+  margin-top: 16px;
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-popup__total {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-popup__link {
+  color: #c47a2c;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.cart-popup__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .cart-popup {
+    width: 280px;
+    right: -16px;
+  }
 }

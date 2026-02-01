@@ -12,6 +12,30 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
 <div class="catalog__tab">Automatic</div>
 </div>
 
+<div class="catalog-toolbar">
+
+  <input
+    type="search"
+    class="catalog-toolbar__search"
+    placeholder="Search by name..."
+  />
+
+  <select class="catalog-toolbar__sort">
+    <option value="">Sort by</option>
+    <option value="price-asc">Price: Low → High</option>
+    <option value="price-desc">Price: High → Low</option>
+    <option value="name">Name</option>
+  </select>
+
+  <button class="catalog-toolbar__add">
+    Add New Product
+  </button>
+
+  <div class="catalog-toolbar__total">
+    Total price: <span class="catalog-toolbar__total-value">$0</span>
+  </div>
+
+</div>
 
 <div class="catalog__grid">
 <article class="product">
@@ -19,7 +43,7 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
 <img src="img/watch-1.png" alt="Aureus Chronograph" />
 </div>
 <h3 class="product__name">Aureus Chronograph</h3>
-<div class="product__price">$185,500USD</div>
+<div class="product__price">$185USD</div>
 <button class="product__buy" data-product="Aureus Chronograph" data-price="185500">Buy Now</button>
 </article>
 
@@ -29,7 +53,7 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
 <img src="img/watch-2.png" alt="Lunar Horizon" />
 </div>
 <h3 class="product__name">Lunar Horizon</h3>
-<div class="product__price">$190,000USD</div>
+<div class="product__price">$190USD</div>
 <button class="product__buy" data-product="Lunar Horizon" data-price="190000">Buy Now</button>
 </article>
 
@@ -40,10 +64,7 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
 <img src="img/watch-3.png" alt="Midnight Meridian" />
 </div>
 <h3 class="product__name">Midnight Meridian</h3>
-<div class="product__price">
-<span class="product__price--old">$250,000USD</span>
-$200,000USD
-</div>
+<div class="product__price">$200USD</div>
 <button class="product__buy" data-product="Midnight Meridian" data-price="200000">Buy Now</button>
 </article>
 
@@ -53,7 +74,7 @@ $200,000USD
 <img src="img/watch-4.png" alt="Veyra Atlas" />
 </div>
 <h3 class="product__name">Veyra Atlas</h3>
-<div class="product__price">$145,500USD</div>
+<div class="product__price">$145USD</div>
 <button class="product__buy" data-product="Veyra Atlas" data-price="145500">Buy Now</button>
 </article>
 </div>
