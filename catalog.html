@@ -78,6 +78,45 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
 <button class="product__buy" data-product="Veyra Atlas" data-price="145500">Buy Now</button>
 </article>
 </div>
+
+<!-- Add / Edit Product Modal -->
+<div class="modal" id="productModal" hidden>
+  <div class="modal__overlay"></div>
+
+  <div class="modal__content">
+    <button class="modal__close">&times;</button>
+
+    <h3 class="modal__title">Add / Edit Product</h3>
+
+    <form class="modal__form">
+      <input
+        type="text"
+        name="name"
+        placeholder="Product name"
+        required
+      />
+
+      <input
+        type="number"
+        name="price"
+        placeholder="Price"
+        required
+      />
+
+      <input
+        type="url"
+        name="image"
+        placeholder="Image URL"
+        required
+      />
+
+      <button type="submit" class="modal__save">
+        Save
+      </button>
+    </form>
+  </div>
+</div>
+
 </section>
 
 
