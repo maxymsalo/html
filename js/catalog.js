@@ -89,6 +89,58 @@ function renderProducts(products) {
   updateCatalogTotal(products);
 }
 
+function renderCartPopup() {
+  const popup = document.querySelector(".cart-popup");
+  if (!popup) return;
+
+  const listEl = popup.querySelector(".cart-popup__list");
+  const totalEl = popup.querySelector(".cart-popup__total");
+
+  if (!listEl || !totalEl) return;
+
+  const cart = getCart();
+  listEl.innerHTML = "";
+
+  if (cart.length === 0) {
+    listEl.innerHTML = "<p>Cart is empty</p>";
+    totalEl.textContent = "Total: $0 USD";
+    return;
+  }
+
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price;
+
+    listEl.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="cart-popup__item">
+        <span>${item.name}</span>
+        <span>
+          $${item.price}
+          <button class="cart-popup__remove" data-index="${index}">✕</button>
+        </span>
+      </div>
+      `
+    );
+  });
+
+  totalEl.textContent = `Total: $${total} USD`;
+}
+
+function openCartPopup() {
+  const popup = document.querySelector(".cart-popup");
+  if (!popup) return;
+
+  popup.hidden = false;
+
+  // важливо для HTMX
+  requestAnimationFrame(() => {
+    renderCartPopup();
+  });
+}
+
 /* ================================
    Toolbar logic
 ================================ */
@@ -181,6 +233,16 @@ function closeModal() {
   editingProductId = null;
 }
 
+function openCartPopup() {
+  const popup = document.querySelector(".cart-popup");
+  if (!popup) return;
+
+  popup.hidden = false;
+  requestAnimationFrame(() => {
+  renderCartPopup();
+  });
+}
+
 /* ================================
    Global event delegation
 ================================ */
@@ -194,7 +256,10 @@ document.addEventListener("click", e => {
   // Buy
   if (e.target.classList.contains("product__buy")) {
     const product = getProducts().find(p => p.id === e.target.dataset.id);
-    if (product) addToCart(product);
+    if (product) {
+      addToCart(product);
+      openCartPopup();
+    }
     return;
   }
 
@@ -212,6 +277,16 @@ document.addEventListener("click", e => {
     return;
   }
 
+  if (e.target.classList.contains("cart-popup__remove")) {
+  const index = Number(e.target.dataset.index);
+  const cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  renderCartPopup();
+  return;
+  }
+
+
   // Close modal
   if (
     e.target.classList.contains("modal__overlay") ||
@@ -220,6 +295,36 @@ document.addEventListener("click", e => {
     closeModal();
   }
 });
+
+// Toggle cart popup by cart icon
+document.addEventListener("click", e => {
+  const cartBtn = e.target.closest(".header__cart-btn");
+  const popup = document.querySelector(".cart-popup");
+
+  if (cartBtn && popup) {
+    popup.hidden = !popup.hidden;
+
+  if (!popup.hidden) {
+    // відкрили — рендеримо
+    renderCartPopup();
+  }
+  return;
+}
+});
+
+//Close cart popup when clicking outside
+
+document.addEventListener("click", e => {
+  const popup = document.querySelector(".cart-popup");
+  const cartBtn = e.target.closest(".header__cart-btn");
+
+  if (!popup) return;
+
+  if (!popup.contains(e.target) && !cartBtn && !e.target.classList.contains("product__buy")) {
+    popup.hidden = true;
+  }
+});
+
 
 /* ================================
    Search & Sort listeners
