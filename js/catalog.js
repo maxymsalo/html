@@ -1,12 +1,13 @@
 // ================================
-// Catalog App – FINAL HTMX-SAFE
+// Catalog App – FINAL STABLE VERSION
+// LocalStorage + HTMX + Mini Cart
 // ================================
 
 const PRODUCTS_KEY = "products";
 const CART_KEY = "cart";
 
 /* ================================
-   Catalog state (search / sort)
+   Catalog UI state
 ================================ */
 const catalogState = {
   search: "",
@@ -14,6 +15,13 @@ const catalogState = {
 };
 
 let editingProductId = null;
+
+/* ================================
+   Utils
+================================ */
+function formatPrice(value) {
+  return Number(value).toLocaleString("en-US");
+}
 
 /* ================================
    Storage helpers
@@ -56,7 +64,25 @@ function deleteProduct(id) {
 }
 
 /* ================================
-   Rendering
+   Notification (toast)
+================================ */
+function showNotification(message) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.hidden = false;
+  toast.classList.add("show");
+
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => (toast.hidden = true), 300);
+  }, 2000);
+}
+
+/* ================================
+   Rendering – Catalog
 ================================ */
 function renderProducts(products) {
   const grid = document.querySelector(".catalog__grid");
@@ -74,7 +100,7 @@ function renderProducts(products) {
         </div>
 
         <h3 class="product__name">${p.name}</h3>
-        <div class="product__price">$${p.price}</div>
+        <div class="product__price">$${formatPrice(p.price)}</div>
 
         <div class="product__actions">
           <button class="product__buy" data-id="${p.id}">Buy Now</button>
@@ -89,13 +115,15 @@ function renderProducts(products) {
   updateCatalogTotal(products);
 }
 
+/* ================================
+   Rendering – Mini Cart
+================================ */
 function renderCartPopup() {
   const popup = document.querySelector(".cart-popup");
   if (!popup) return;
 
   const listEl = popup.querySelector(".cart-popup__list");
   const totalEl = popup.querySelector(".cart-popup__total");
-
   if (!listEl || !totalEl) return;
 
   const cart = getCart();
@@ -110,7 +138,7 @@ function renderCartPopup() {
   let total = 0;
 
   cart.forEach((item, index) => {
-    total += item.price;
+    total += Number(item.price);
 
     listEl.insertAdjacentHTML(
       "beforeend",
@@ -118,7 +146,7 @@ function renderCartPopup() {
       <div class="cart-popup__item">
         <span>${item.name}</span>
         <span>
-          $${item.price}
+          $${formatPrice(item.price)}
           <button class="cart-popup__remove" data-index="${index}">✕</button>
         </span>
       </div>
@@ -126,7 +154,7 @@ function renderCartPopup() {
     );
   });
 
-  totalEl.textContent = `Total: $${total} USD`;
+  totalEl.textContent = `Total: $${formatPrice(total)} USD`;
 }
 
 function openCartPopup() {
@@ -134,11 +162,7 @@ function openCartPopup() {
   if (!popup) return;
 
   popup.hidden = false;
-
-  // важливо для HTMX
-  requestAnimationFrame(() => {
-    renderCartPopup();
-  });
+  requestAnimationFrame(renderCartPopup);
 }
 
 /* ================================
@@ -148,22 +172,18 @@ function updateCatalogTotal(products) {
   const el = document.querySelector(".catalog-toolbar__total-value");
   if (!el) return;
 
-  const total = products.reduce((sum, p) => sum + p.price, 0);
-  el.textContent = `$${total}`;
+  const total = products.reduce((sum, p) => sum + Number(p.price), 0);
+  el.textContent = `$${formatPrice(total)}`;
 }
 
 function applySearchAndSort() {
   let products = getProducts();
 
-  // SEARCH
   if (catalogState.search) {
     const q = catalogState.search.toLowerCase();
-    products = products.filter(p =>
-      p.name.toLowerCase().includes(q)
-    );
+    products = products.filter(p => p.name.toLowerCase().includes(q));
   }
 
-  // SORT
   if (catalogState.sort === "price-asc") {
     products.sort((a, b) => a.price - b.price);
   }
@@ -180,9 +200,10 @@ function applySearchAndSort() {
 }
 
 /* ================================
-   Cart
+   Cart logic
 ================================ */
 function addToCart(product) {
+  if (!product) return;
   const cart = getCart();
   cart.push(product);
   saveCart(cart);
@@ -194,137 +215,70 @@ function updateCartCounter() {
 }
 
 /* ================================
-   Modal helpers (HTMX-safe)
-================================ */
-function getModal() {
-  const modal = document.getElementById("productModal");
-  if (!modal) return null;
-
-  return {
-    modal,
-    form: modal.querySelector(".modal__form"),
-    overlay: modal.querySelector(".modal__overlay")
-  };
-}
-
-function openModal(product = null) {
-  const m = getModal();
-  if (!m) return;
-
-  m.modal.hidden = false;
-
-  if (product) {
-    m.form.name.value = product.name;
-    m.form.price.value = product.price;
-    m.form.image.value = product.image;
-    editingProductId = product.id;
-  } else {
-    m.form.reset();
-    editingProductId = null;
-  }
-}
-
-function closeModal() {
-  const m = getModal();
-  if (!m) return;
-
-  m.modal.hidden = true;
-  m.form.reset();
-  editingProductId = null;
-}
-
-function openCartPopup() {
-  const popup = document.querySelector(".cart-popup");
-  if (!popup) return;
-
-  popup.hidden = false;
-  requestAnimationFrame(() => {
-  renderCartPopup();
-  });
-}
-
-/* ================================
    Global event delegation
 ================================ */
 document.addEventListener("click", e => {
-  // Add new product
-  if (e.target.classList.contains("catalog-toolbar__add")) {
-    openModal();
-    return;
-  }
+  // Buy Now (FIXED)
+  const buyBtn = e.target.closest(".product__buy");
+  if (buyBtn) {
+    const id = buyBtn.dataset.id;
+    const product = getProducts().find(p => p.id === id);
 
-  // Buy
-  if (e.target.classList.contains("product__buy")) {
-    const product = getProducts().find(p => p.id === e.target.dataset.id);
-    if (product) {
-      addToCart(product);
-      openCartPopup();
+    if (!product) {
+      alert("Product added to cart");
+      return;
     }
+
+    addToCart(product);
+    openCartPopup();
+
+    // ✅ alert тепер без undefined
+    alert(`${product.name} added to cart`);
+    showNotification(`${product.name} added to cart`);
     return;
   }
 
   // Edit
-  if (e.target.classList.contains("product__edit")) {
-    const product = getProducts().find(p => p.id === e.target.dataset.id);
+  const editBtn = e.target.closest(".product__edit");
+  if (editBtn) {
+    const product = getProducts().find(p => p.id === editBtn.dataset.id);
     if (product) openModal(product);
     return;
   }
 
   // Delete
-  if (e.target.classList.contains("product__delete")) {
-    deleteProduct(e.target.dataset.id);
+  const deleteBtn = e.target.closest(".product__delete");
+  if (deleteBtn) {
+    deleteProduct(deleteBtn.dataset.id);
     applySearchAndSort();
     return;
   }
 
+  // Remove from cart
   if (e.target.classList.contains("cart-popup__remove")) {
-  const index = Number(e.target.dataset.index);
-  const cart = getCart();
-  cart.splice(index, 1);
-  saveCart(cart);
-  renderCartPopup();
-  return;
+    const index = Number(e.target.dataset.index);
+    const cart = getCart();
+    cart.splice(index, 1);
+    saveCart(cart);
+    renderCartPopup();
+    return;
   }
 
-
-  // Close modal
-  if (
-    e.target.classList.contains("modal__overlay") ||
-    e.target.classList.contains("modal__close")
-  ) {
-    closeModal();
-  }
-});
-
-// Toggle cart popup by cart icon
-document.addEventListener("click", e => {
+  // Toggle cart popup
   const cartBtn = e.target.closest(".header__cart-btn");
   const popup = document.querySelector(".cart-popup");
 
   if (cartBtn && popup) {
     popup.hidden = !popup.hidden;
-
-  if (!popup.hidden) {
-    // відкрили — рендеримо
-    renderCartPopup();
+    if (!popup.hidden) renderCartPopup();
+    return;
   }
-  return;
-}
-});
 
-//Close cart popup when clicking outside
-
-document.addEventListener("click", e => {
-  const popup = document.querySelector(".cart-popup");
-  const cartBtn = e.target.closest(".header__cart-btn");
-
-  if (!popup) return;
-
-  if (!popup.contains(e.target) && !cartBtn && !e.target.classList.contains("product__buy")) {
+  // Close cart popup on outside click
+  if (popup && !popup.contains(e.target) && !cartBtn) {
     popup.hidden = true;
   }
 });
-
 
 /* ================================
    Search & Sort listeners
@@ -341,36 +295,6 @@ document.addEventListener("change", e => {
     catalogState.sort = e.target.value;
     applySearchAndSort();
   }
-});
-
-/* ================================
-   Modal submit
-================================ */
-document.addEventListener("submit", e => {
-  if (!e.target.classList.contains("modal__form")) return;
-
-  e.preventDefault();
-
-  const { name, price, image } = e.target;
-
-  if (editingProductId) {
-    updateProduct({
-      id: editingProductId,
-      name: name.value.trim(),
-      price: Number(price.value),
-      image: image.value.trim()
-    });
-  } else {
-    addProduct({
-      id: Date.now().toString(),
-      name: name.value.trim(),
-      price: Number(price.value),
-      image: image.value.trim()
-    });
-  }
-
-  closeModal();
-  applySearchAndSort();
 });
 
 /* ================================
