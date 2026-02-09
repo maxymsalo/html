@@ -1,90 +1,58 @@
 <section class="catalog">
-<span class="catalog__label">// CATALOG</span>
-<h2 class="catalog__title">OUR PRODUCTS</h2>
-<p class="catalog__subtitle">
-Explore our curated timepieces, from classic essentials to bold statement pieces.
-</p>
+  <span class="catalog__label">// CATALOG</span>
 
+  <h2 class="catalog__title">OUR PRODUCTS</h2>
 
-<div class="catalog__tabs">
-<div class="catalog__tab catalog__tab--active">Mechanical</div>
-<div class="catalog__tab">Quartz</div>
-<div class="catalog__tab">Automatic</div>
-</div>
+  <p class="catalog__subtitle">
+    Explore our curated timepieces, from classic essentials to bold statement pieces.
+  </p>
 
-<div class="catalog-toolbar">
-
-  <input
-    type="search"
-    class="catalog-toolbar__search"
-    placeholder="Search by name..."
-  />
-
-  <select class="catalog-toolbar__sort">
-    <option value="">Sort by</option>
-    <option value="price-asc">Price: Low → High</option>
-    <option value="price-desc">Price: High → Low</option>
-    <option value="name">Name</option>
-  </select>
-
-  <button class="catalog-toolbar__add">
-    Add New Product
-  </button>
-
-  <div class="catalog-toolbar__total">
-    Total price: <span class="catalog-toolbar__total-value">$0</span>
+  <!-- Tabs (UI only, logic can be added later) -->
+  <div class="catalog__tabs">
+    <div class="catalog__tab catalog__tab--active">Mechanical</div>
+    <div class="catalog__tab">Quartz</div>
+    <div class="catalog__tab">Automatic</div>
   </div>
 
-</div>
+  <!-- Toolbar -->
+  <div class="catalog-toolbar">
 
-<div class="catalog__grid">
-<article class="product">
-<div class="product__image-wrapper">
-<img src="img/watch-1.png" alt="Aureus Chronograph" />
-</div>
-<h3 class="product__name">Aureus Chronograph</h3>
-<div class="product__price">$185.50USD</div>
-<button class="product__buy" data-product="Aureus Chronograph" data-price="185.50">Buy Now</button>
-</article>
+    <input
+      type="search"
+      class="catalog-toolbar__search"
+      placeholder="Search by name..."
+      aria-label="Search products"
+    />
 
+    <select class="catalog-toolbar__sort" aria-label="Sort products">
+      <option value="">Sort by</option>
+      <option value="price-asc">Price: Low → High</option>
+      <option value="price-desc">Price: High → Low</option>
+      <option value="name">Name</option>
+    </select>
 
-<article class="product">
-<div class="product__image-wrapper">
-<img src="img/watch-2.png" alt="Lunar Horizon" />
-</div>
-<h3 class="product__name">Lunar Horizon</h3>
-<div class="product__price">$190.00USD</div>
-<button class="product__buy" data-product="Lunar Horizon" data-price="190.00">Buy Now</button>
-</article>
+    <button class="catalog-toolbar__add" type="button">
+      Add New Product
+    </button>
 
+    <div class="catalog-toolbar__total">
+      Total price:
+      <span class="catalog-toolbar__total-value">$0</span>
+    </div>
 
-<article class="product">
-<div class="product__image-wrapper">
-<span class="product__badge">Sale</span>
-<img src="img/watch-3.png" alt="Midnight Meridian" />
-</div>
-<h3 class="product__name">Midnight Meridian</h3>
-<div class="product__price">$200.00USD</div>
-<button class="product__buy" data-product="Midnight Meridian" data-price="200.00">Buy Now</button>
-</article>
+  </div>
 
+  <!-- Catalog Grid (JS renders products here) -->
+  <div class="catalog__grid"></div>
 
-<article class="product">
-<div class="product__image-wrapper">
-<img src="img/watch-4.png" alt="Veyra Atlas" />
-</div>
-<h3 class="product__name">Veyra Atlas</h3>
-<div class="product__price">$145.50USD</div>
-<button class="product__buy" data-product="Veyra Atlas" data-price="145.50">Buy Now</button>
-</article>
-</div>
+</section>
 
 <!-- Add / Edit Product Modal -->
 <div class="modal" id="productModal" hidden>
   <div class="modal__overlay"></div>
 
   <div class="modal__content">
-    <button class="modal__close">&times;</button>
+    <button class="modal__close" type="button">&times;</button>
 
     <h3 class="modal__title">Add / Edit Product</h3>
 
@@ -100,6 +68,7 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
         type="number"
         name="price"
         placeholder="Price"
+        step="0.01"
         required
       />
 
@@ -117,25 +86,11 @@ Explore our curated timepieces, from classic essentials to bold statement pieces
   </div>
 </div>
 
-</section>
+<!-- Mini Cart Popup -->
+<div class="cart-popup" hidden>
+  <div class="cart-popup__list"></div>
+  <div class="cart-popup__total">Total: $0 USD</div>
+</div>
 
-
-<script>
-const cart = [];
-
-
-document.querySelectorAll('.product__buy').forEach(button => {
-button.addEventListener('click', () => {
-const productName = button.dataset.product;
-const price = Number(button.dataset.price);
-cart.push({ name: productName, price });
-alert(`${productName} added to cart`);
-console.log(cart);
-});
-});
-</script>
-
+<!-- Toast Notification -->
 <div class="toast" id="toast" hidden></div>
-
-</body>
-</html>

@@ -34,6 +34,36 @@ function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 }
 
+// Ініціалізація продуктів
+if (!localStorage.getItem("products")) {
+  saveProducts([
+    {
+      id: "p1",
+      name: "Aureus Chronograph",
+      price: 185.5,
+      image: "img/watch-1.png"
+    },
+    {
+      id: "p2",
+      name: "Lunar Horizon",
+      price: 190,
+      image: "img/watch-2.png"
+    },
+    {
+      id: "p3",
+      name: "Midnight Meridian",
+      price: 200,
+      image: "img/watch-3.png"
+    },
+    {
+      id: "p4",
+      name: "Veyra Atlas",
+      price: 145.5,
+      image: "img/watch-4.png"
+    }
+  ]);
+}
+
 function getCart() {
   return JSON.parse(localStorage.getItem(CART_KEY)) || [];
 }
@@ -225,15 +255,12 @@ document.addEventListener("click", e => {
     const product = getProducts().find(p => p.id === id);
 
     if (!product) {
-      alert("Product added to cart");
+      alert("Product not found");
       return;
     }
 
     addToCart(product);
-    openCartPopup();
-
-    // ✅ alert тепер без undefined
-    alert(`${product.name} added to cart`);
+    
     showNotification(`${product.name} added to cart`);
     return;
   }
