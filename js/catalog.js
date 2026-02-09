@@ -94,6 +94,36 @@ function deleteProduct(id) {
 }
 
 /* ================================
+   Modal logic (Add / Edit)
+================================ */
+function openModal(product = null) {
+  const modal = document.getElementById("productModal");
+  if (!modal) return;
+
+  const form = modal.querySelector(".modal__form");
+
+  modal.hidden = false;
+
+  if (product) {
+    // Edit mode
+    editingProductId = product.id;
+    form.name.value = product.name;
+    form.price.value = product.price;
+    form.image.value = product.image;
+  } else {
+    // Add mode
+    editingProductId = null;
+    form.reset();
+  }
+}
+
+function closeModal() {
+  const modal = document.getElementById("productModal");
+  if (modal) modal.hidden = true;
+}
+
+
+/* ================================
    Notification (toast)
 ================================ */
 function showNotification(message) {
@@ -305,6 +335,22 @@ document.addEventListener("click", e => {
   if (popup && !popup.contains(e.target) && !cartBtn) {
     popup.hidden = true;
   }
+  
+  // Add new product
+  const addBtn = e.target.closest(".catalog-toolbar__add");
+  if (addBtn) {
+  openModal();
+  return;
+  }
+
+  if (
+  e.target.classList.contains("modal__close") ||
+  e.target.classList.contains("modal__overlay")
+  ) {
+  closeModal();
+  return;
+}
+
 });
 
 /* ================================
@@ -330,4 +376,35 @@ document.addEventListener("change", e => {
 document.addEventListener("htmx:afterSwap", () => {
   applySearchAndSort();
   updateCartCounter();
+});
+
+/* ================================
+   Modal form submit
+================================ */
+document.addEventListener("submit", e => {
+  if (!e.target.classList.contains("modal__form")) return;
+
+  e.preventDefault();
+
+  const form = e.target;
+
+  const product = {
+    id: editingProductId ?? crypto.randomUUID(),
+    name: form.name.value.trim(),
+    price: Number(form.price.value),
+    image: form.image.value.trim()
+  };
+
+  if (!product.name || !product.price || !product.image) return;
+
+  if (editingProductId) {
+    updateProduct(product);
+    showNotification("Product updated");
+  } else {
+    addProduct(product);
+    showNotification("Product added");
+  }
+
+  closeModal();
+  applySearchAndSort();
 });
