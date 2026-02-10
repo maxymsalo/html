@@ -20,7 +20,7 @@ let editingProductId = null;
    Utils
 ================================ */
 function formatPrice(value) {
-  return Number(value).toLocaleString("en-US");
+  return Number(value);
 }
 
 /* ================================
@@ -40,7 +40,7 @@ if (!localStorage.getItem("products")) {
     {
       id: "p1",
       name: "Aureus Chronograph",
-      price: 185.5,
+      price: 185,
       image: "img/watch-1.png"
     },
     {
@@ -58,7 +58,7 @@ if (!localStorage.getItem("products")) {
     {
       id: "p4",
       name: "Veyra Atlas",
-      price: 145.5,
+      price: 145,
       image: "img/watch-4.png"
     }
   ]);
@@ -180,7 +180,7 @@ function renderProducts(products) {
         </div>
 
         <h3 class="product__name">${p.name}</h3>
-        <div class="product__price">$${formatPrice(p.price)}</div>
+        <div class="product__price">$${p.price}</div>
 
         <button class="product__buy" data-id="${p.id}">
           Buy Now
@@ -233,7 +233,7 @@ function renderCartPopup() {
     );
   });
 
-  totalEl.textContent = `Total: $${formatPrice(total)} USD`;
+  totalEl.textContent = `Total: $${total} USD`;
 }
 
 function openCartPopup() {
@@ -414,7 +414,12 @@ document.addEventListener("submit", e => {
     image: form.image.value.trim()
   };
 
-  if (!product.name || !product.price || !product.image) return;
+  if (!product.name || !product.image) return;
+
+  if (!Number.isFinite(product.price) || product.price <= 0) {
+    showNotification("Invalid price");
+    return;
+  }
 
   if (editingProductId) {
     updateProduct(product);
@@ -427,3 +432,4 @@ document.addEventListener("submit", e => {
   closeModal();
   applySearchAndSort();
 });
+
