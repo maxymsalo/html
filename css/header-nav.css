@@ -88,16 +88,25 @@ body {
   gap: 16px;
 }
 
-.action__icon {
-  color: #ffffff;
-  font-size: 12px;
+.social-icon {
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  color: #000000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   text-decoration: none;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
+  font-size: 14px;
+
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.action__icon:hover {
-  opacity: 1;
+.social-icon:hover {
+  background: #e5e5e5;
+  transform: translateY(-2px);
 }
 
 /* ================================
