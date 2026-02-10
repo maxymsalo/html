@@ -156,17 +156,35 @@ function renderProducts(products) {
       `
       <article class="product">
         <div class="product__image-wrapper">
+
+          <!-- ADMIN BUTTONS -->
+          <div class="product__admin">
+            <button
+              class="admin-btn admin-btn--edit product__edit"
+              data-id="${p.id}"
+              title="Edit product"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="admin-btn admin-btn--delete product__delete"
+              data-id="${p.id}"
+              title="Delete product"
+            >
+              ✖
+            </button>
+          </div>
+
           <img src="${p.image}" alt="${p.name}">
         </div>
 
         <h3 class="product__name">${p.name}</h3>
         <div class="product__price">$${formatPrice(p.price)}</div>
 
-        <div class="product__actions">
-          <button class="product__buy" data-id="${p.id}">Buy Now</button>
-          <button class="product__edit" data-id="${p.id}">Edit</button>
-          <button class="product__delete" data-id="${p.id}">Delete</button>
-        </div>
+        <button class="product__buy" data-id="${p.id}">
+          Buy Now
+        </button>
       </article>
       `
     );
@@ -174,6 +192,7 @@ function renderProducts(products) {
 
   updateCatalogTotal(products);
 }
+
 
 /* ================================
    Rendering – Mini Cart
