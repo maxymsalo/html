@@ -4,7 +4,8 @@
   <h2 class="catalog__title">OUR PRODUCTS</h2>
 
   <p class="catalog__subtitle">
-    Explore our curated timepieces, from classic essentials to bold statement pieces.
+    Explore our curated timepieces, from classic essentials to bold statement
+    pieces.
   </p>
 
   <!-- Tabs (UI only, logic can be added later) -->
@@ -16,7 +17,6 @@
 
   <!-- Toolbar -->
   <div class="catalog-toolbar">
-
     <input
       type="search"
       class="catalog-toolbar__search"
@@ -31,20 +31,16 @@
       <option value="name">Name</option>
     </select>
 
-    <button class="catalog-toolbar__add" type="button">
-      Add New Product
-    </button>
+    <button class="catalog-toolbar__add" type="button">Add New Product</button>
 
     <div class="catalog-toolbar__total">
       Total price:
       <span class="catalog-toolbar__total-value">$0</span>
     </div>
-
   </div>
 
   <!-- Catalog Grid (JS renders products here) -->
   <div class="catalog__grid"></div>
-
 </section>
 
 <!-- Add / Edit Product Modal -->
@@ -57,12 +53,7 @@
     <h3 class="modal__title">Add / Edit Product</h3>
 
     <form class="modal__form">
-      <input
-        type="text"
-        name="name"
-        placeholder="Product name"
-        required
-      />
+      <input type="text" name="name" placeholder="Product name" required />
 
       <input
         type="number"
@@ -72,16 +63,9 @@
         required
       />
 
-      <input
-        type="url"
-        name="image"
-        placeholder="Image URL"
-        required
-      />
+      <input type="url" name="image" placeholder="Image URL" required />
 
-      <button type="submit" class="modal__save">
-        Save
-      </button>
+      <button type="submit" class="modal__save">Save</button>
     </form>
   </div>
 </div>

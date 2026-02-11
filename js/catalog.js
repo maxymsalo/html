@@ -11,7 +11,7 @@ const CART_KEY = "cart";
 ================================ */
 const catalogState = {
   search: "",
-  sort: ""
+  sort: "",
 };
 
 let editingProductId = null;
@@ -41,26 +41,26 @@ if (!localStorage.getItem("products")) {
       id: "p1",
       name: "Aureus Chronograph",
       price: 185,
-      image: "img/watch-1.png"
+      image: "img/watch-1.png",
     },
     {
       id: "p2",
       name: "Lunar Horizon",
       price: 190,
-      image: "img/watch-2.png"
+      image: "img/watch-2.png",
     },
     {
       id: "p3",
       name: "Midnight Meridian",
       price: 200,
-      image: "img/watch-3.png"
+      image: "img/watch-3.png",
     },
     {
       id: "p4",
       name: "Veyra Atlas",
       price: 145,
-      image: "img/watch-4.png"
-    }
+      image: "img/watch-4.png",
+    },
   ]);
 }
 
@@ -83,14 +83,14 @@ function addProduct(product) {
 }
 
 function updateProduct(updatedProduct) {
-  const products = getProducts().map(p =>
-    p.id === updatedProduct.id ? updatedProduct : p
+  const products = getProducts().map((p) =>
+    p.id === updatedProduct.id ? updatedProduct : p,
   );
   saveProducts(products);
 }
 
 function deleteProduct(id) {
-  saveProducts(getProducts().filter(p => p.id !== id));
+  saveProducts(getProducts().filter((p) => p.id !== id));
 }
 
 /* ================================
@@ -122,7 +122,6 @@ function closeModal() {
   if (modal) modal.hidden = true;
 }
 
-
 /* ================================
    Notification (toast)
 ================================ */
@@ -150,7 +149,7 @@ function renderProducts(products) {
 
   grid.innerHTML = "";
 
-  products.forEach(p => {
+  products.forEach((p) => {
     grid.insertAdjacentHTML(
       "beforeend",
       `
@@ -186,13 +185,12 @@ function renderProducts(products) {
           Buy Now
         </button>
       </article>
-      `
+      `,
     );
   });
 
   updateCatalogTotal(products);
 }
-
 
 /* ================================
    Rendering – Mini Cart
@@ -229,7 +227,7 @@ function renderCartPopup() {
           <button class="cart-popup__remove" data-index="${index}">✕</button>
         </span>
       </div>
-      `
+      `,
     );
   });
 
@@ -260,7 +258,7 @@ function applySearchAndSort() {
 
   if (catalogState.search) {
     const q = catalogState.search.toLowerCase();
-    products = products.filter(p => p.name.toLowerCase().includes(q));
+    products = products.filter((p) => p.name.toLowerCase().includes(q));
   }
 
   if (catalogState.sort === "price-asc") {
@@ -296,12 +294,12 @@ function updateCartCounter() {
 /* ================================
    Global event delegation
 ================================ */
-document.addEventListener("click", e => {
+document.addEventListener("click", (e) => {
   // Buy Now (FIXED)
   const buyBtn = e.target.closest(".product__buy");
   if (buyBtn) {
     const id = buyBtn.dataset.id;
-    const product = getProducts().find(p => p.id === id);
+    const product = getProducts().find((p) => p.id === id);
 
     if (!product) {
       alert("Product not found");
@@ -309,7 +307,7 @@ document.addEventListener("click", e => {
     }
 
     addToCart(product);
-    
+
     showNotification(`${product.name} added to cart`);
     return;
   }
@@ -317,7 +315,7 @@ document.addEventListener("click", e => {
   // Edit
   const editBtn = e.target.closest(".product__edit");
   if (editBtn) {
-    const product = getProducts().find(p => p.id === editBtn.dataset.id);
+    const product = getProducts().find((p) => p.id === editBtn.dataset.id);
     if (product) openModal(product);
     return;
   }
@@ -325,16 +323,15 @@ document.addEventListener("click", e => {
   // Delete
   const deleteBtn = e.target.closest(".product__delete");
   if (deleteBtn) {
-  const confirmed = confirm("Вилучити цей товар?");
+    const confirmed = confirm("Вилучити цей товар?");
 
-  if (!confirmed) return;
+    if (!confirmed) return;
 
-  deleteProduct(deleteBtn.dataset.id);
-  showNotification("Product deleted");
-  applySearchAndSort();
-  return;
+    deleteProduct(deleteBtn.dataset.id);
+    showNotification("Product deleted");
+    applySearchAndSort();
+    return;
   }
-
 
   // Remove from cart
   if (e.target.classList.contains("cart-popup__remove")) {
@@ -360,35 +357,34 @@ document.addEventListener("click", e => {
   if (popup && !popup.contains(e.target) && !cartBtn) {
     popup.hidden = true;
   }
-  
+
   // Add new product
   const addBtn = e.target.closest(".catalog-toolbar__add");
   if (addBtn) {
-  openModal();
-  return;
+    openModal();
+    return;
   }
 
   if (
-  e.target.classList.contains("modal__close") ||
-  e.target.classList.contains("modal__overlay")
+    e.target.classList.contains("modal__close") ||
+    e.target.classList.contains("modal__overlay")
   ) {
-  closeModal();
-  return;
-}
-
+    closeModal();
+    return;
+  }
 });
 
 /* ================================
    Search & Sort listeners
 ================================ */
-document.addEventListener("input", e => {
+document.addEventListener("input", (e) => {
   if (e.target.classList.contains("catalog-toolbar__search")) {
     catalogState.search = e.target.value;
     applySearchAndSort();
   }
 });
 
-document.addEventListener("change", e => {
+document.addEventListener("change", (e) => {
   if (e.target.classList.contains("catalog-toolbar__sort")) {
     catalogState.sort = e.target.value;
     applySearchAndSort();
@@ -406,7 +402,7 @@ document.addEventListener("htmx:afterSwap", () => {
 /* ================================
    Modal form submit
 ================================ */
-document.addEventListener("submit", e => {
+document.addEventListener("submit", (e) => {
   if (!e.target.classList.contains("modal__form")) return;
 
   e.preventDefault();
@@ -417,7 +413,7 @@ document.addEventListener("submit", e => {
     id: editingProductId ?? crypto.randomUUID(),
     name: form.name.value.trim(),
     price: Number(form.price.value),
-    image: form.image.value.trim()
+    image: form.image.value.trim(),
   };
 
   if (!product.name || !product.image) return;
@@ -438,4 +434,3 @@ document.addEventListener("submit", e => {
   closeModal();
   applySearchAndSort();
 });
-

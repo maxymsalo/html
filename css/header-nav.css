@@ -101,7 +101,9 @@ body {
   text-decoration: none;
   font-size: 14px;
 
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
 }
 
 .social-icon:hover {

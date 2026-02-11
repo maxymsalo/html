@@ -1,5 +1,4 @@
 .header-hero {
   min-height: 100vh;
-  background:
-    url("../img/home-cover.png") center / cover no-repeat;
+  background: url("../img/home-cover.png") center / cover no-repeat;
 }
