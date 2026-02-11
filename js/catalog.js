@@ -325,10 +325,16 @@ document.addEventListener("click", e => {
   // Delete
   const deleteBtn = e.target.closest(".product__delete");
   if (deleteBtn) {
-    deleteProduct(deleteBtn.dataset.id);
-    applySearchAndSort();
-    return;
+  const confirmed = confirm("Вилучити цей товар?");
+
+  if (!confirmed) return;
+
+  deleteProduct(deleteBtn.dataset.id);
+  showNotification("Product deleted");
+  applySearchAndSort();
+  return;
   }
+
 
   // Remove from cart
   if (e.target.classList.contains("cart-popup__remove")) {
